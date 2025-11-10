@@ -10,8 +10,13 @@ import time
 import json
 import traceback
 from pathlib import Path
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                             QHBoxLayout, QTextEdit, QLineEdit, QPushButton, 
+
+# Add parent directories to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
+                             QHBoxLayout, QTextEdit, QLineEdit, QPushButton,
                              QComboBox, QLabel, QGroupBox, QDialog, QListWidget,
                              QMessageBox, QSplitter, QProgressBar, QCheckBox,
                              QTabWidget, QScrollArea, QFrame, QSizePolicy, QFileDialog,
@@ -19,15 +24,9 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer, QSettings, QRegExp, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QFont, QTextCursor, QPalette, QColor, QTextCharFormat, QSyntaxHighlighter, QRegExpValidator, QIcon, QPainter, QLinearGradient
 
-# Configuration
-CONFIG = {
-    "ALLTALK_API_URL": "http://localhost:7851/api/tts-generate",
-    "OLLAMA_URL": "http://localhost:11434/api/generate",
-    "LOG_FILE": "error_log.txt",
-    "SAVE_DIR": "saves",
-    "CONFIG_FILE": "config.ini",
-    "AUTO_SAVE_INTERVAL": 300000,
-}
+# Import shared game core
+from ..core.game_core import GameCore, CONFIG, ROLE_STARTERS
+from ..core.game_core import get_genre_description
 
 # Theme configurations
 THEMES = {
@@ -168,153 +167,6 @@ THEMES = {
     }
 }
 
-# Role-specific starting scenarios
-ROLE_STARTERS = {
-    "Fantasy": {
-        "Peasant": "You're working in the fields of a small village when",
-        "Noble": "You're waking up from your bed in your mansion when",
-        "Mage": "You're studying ancient tomes in your tower when",
-        "Knight": "You're training in the castle courtyard when",
-        "Ranger": "You're tracking animals in the deep forest when",
-        "Thief": "You're casing a noble's house from an alley in a city when",
-        "Bard": "You're performing in a crowded tavern when",
-        "Cleric": "You're tending to the sick in the temple when",
-        "Assassin": "You're preparing to attack your target in the shadows when",
-        "Paladin": "You're praying at the altar of your deity when",
-        "Alchemist": "You're carefully measuring reagents in your alchemy lab when",
-        "Druid": "You're communing with nature in the sacred grove when",
-        "Warlock": "You're negotiating with your otherworldly patron when",
-        "Monk": "You're meditating in the monastery courtyard when",
-        "Sorcerer": "You're struggling to control your innate magical powers when",
-        "Beastmaster": "You're training your animal companions in the forest clearing when",
-        "Enchanter": "You're imbuing magical properties into a mundane object when",
-        "Blacksmith": "You're forging a new weapon at your anvil when",
-        "Merchant": "You're haggling with customers at the marketplace when",
-        "Gladiator": "You're preparing for combat in the arena when",
-        "Wizard": "You're researching new spells in your arcane library when"
-    },
-    "Sci-Fi": {
-        "Space Marine": "You're conducting patrol on a derelict space station when",
-        "Scientist": "You're analyzing alien samples in your lab when",
-        "Android": "User is performing system diagnostics on your ship when",
-        "Pilot": "You're navigating through an asteroid field when",
-        "Engineer": "You're repairing the FTL drive when",
-        "Alien Diplomat": "You're negotiating with an alien delegation when",
-        "Bounty Hunter": "You're tracking a target through a spaceport when",
-        "Starship Captain": "You're commanding the bridge during warp travel when",
-        "Space Pirate": "You're plotting your next raid from your starship's bridge when",
-        "Navigator": "You're charting a course through uncharted space when",
-        "Robot Technician": "You're repairing a malfunctioning android when",
-        "Cybernetic Soldier": "You're calibrating your combat implants when",
-        "Explorer": "You're scanning a newly discovered planet when",
-        "Astrobiologist": "You're studying alien life forms in your lab when",
-        "Quantum Hacker": "You're breaching a corporate firewall when",
-        "Galactic Trader": "You're negotiating a deal for rare resources when",
-        "AI Specialist": "You're debugging a sentient AI's personality matrix when",
-        "Terraformer": "You're monitoring atmospheric changes on a new colony world when",
-        "Cyberneticist": "You're installing neural enhancements in a patient when"
-    },
-    "Cyberpunk": {
-        "Hacker": "You're infiltrating a corporate network when",
-        "Street Samurai": "You're patrolling the neon-lit streets when",
-        "Corporate Agent": "You're closing a deal in a high-rise office when",
-        "Techie": "You're modifying cyberware in your workshop when",
-        "Rebel Leader": "You're planning a raid on a corporate facility when",
-        "Cyborg": "You're calibrating your cybernetic enhancements when",
-        "Drone Operator": "You're controlling surveillance drones from your command center when",
-        "Synth Dealer": "You're negotiating a deal for illegal cybernetics when",
-        "Information Courier": "You're delivering sensitive data through dangerous streets when",
-        "Augmentation Engineer": "You're installing cyberware in a back-alley clinic when",
-        "Black Market Dealer": "You're arranging contraband in your hidden shop when",
-        "Scumbag": "You're looking for an easy mark in the slums when",
-        "Police": "You're patrolling the neon-drenched streets when"
-    },
-    "Post-Apocalyptic": {
-        "Survivor": "You're scavenging in the ruins of an old city when",
-        "Scavenger": "You're searching a pre-collapse bunker when",
-        "Raider": "You're ambushing a convoy in the wasteland when",
-        "Medic": "You're treating radiation sickness in your clinic when",
-        "Cult Leader": "You're preaching to your followers at a ritual when",
-        "Mutant": "You're hiding your mutations in a settlement when",
-        "Trader": "You're bartering supplies at a wasteland outpost when",
-        "Berserker": "You're sharpening your weapons for the next raid when",
-        "Soldier": "You're guarding a settlement from raiders when"
-    },
-    "1880": {
-        "Thief": "You're lurking in the shadows of the city alleyways when",
-        "Beggar": "You're sitting on the cold street corner with your cup when",
-        "Detective": "You're examining a clue at the crime scene when",
-        "Rich Man": "You're enjoying a cigar in your luxurious study when",
-        "Factory Worker": "You're toiling away in the noisy factory when",
-        "Child": "You're playing with a hoop in the street when",
-        "Orphan": "You're searching for scraps in the trash bins when",
-        "Murderer": "You're cleaning blood from your hands in a dark alley when",
-        "Butcher": "You're sharpening your knives behind the counter when",
-        "Baker": "You're kneading dough in the early morning hours when",
-        "Banker": "You're counting stacks of money in your office when",
-        "Policeman": "You're walking your beat on the foggy streets when"
-    },
-    "WW1": {
-        "Soldier (French)": "You're huddled in the muddy trenches of the Western Front when",
-        "Soldier (English)": "You're writing a letter home by candlelight when",
-        "Soldier (Russian)": "You're shivering in the frozen Eastern Front when",
-        "Soldier (Italian)": "You're climbing the steep Alpine slopes when",
-        "Soldier (USA)": "You're arriving fresh to the European theater when",
-        "Soldier (Japanese)": "You're guarding a Pacific outpost when",
-        "Soldier (German)": "You're preparing for a night raid when",
-        "Soldier (Austrian)": "You're defending the crumbling empire's borders when",
-        "Soldier (Bulgarian)": "You're holding the line in the Balkans when",
-        "Civilian": "You're queuing for rationed bread when",
-        "Resistance Fighter": "You're transmitting coded messages in an attic when"
-    },
-    "1925 New York": {
-        "Mafia Boss": "You're counting your illicit earnings in a backroom speakeasy when",
-        "Drunk": "You're stumbling out of a jazz club at dawn when",
-        "Police Officer": "You're taking bribes from a known bootlegger when",
-        "Detective": "You're examining a gangland murder scene when",
-        "Factory Worker": "You're assembling Model Ts on the production line when",
-        "Bootlegger": "You're transporting a shipment of illegal hooch when"
-    },
-    "Roman Empire": {
-        "Slave": "You're carrying heavy stones under the hot sun when",
-        "Gladiator": "You're sharpening your sword before entering the arena when",
-        "Beggar": "You're pleading for coins near the Forum when",
-        "Senator": "You're plotting political maneuvers in the Curia when",
-        "Imperator": "You're reviewing legions from your palace balcony when",
-        "Soldier": "User is marching on the frontier when",
-        "Noble": "You're hosting a decadent feast in your villa when",
-        "Trader": "You're haggling over spices in the market when",
-        "Peasant": "You're tending your meager crops when",
-        "Priest": "You're sacrificing a goat at the temple when",
-        "Barbarian": "You're sharpening your axe beyond the limes when",
-        "Philosopher": "You're contemplating the nature of existence when",
-        "Mathematician": "You're calculating the circumference of the Earth when",
-        "Semi-God": "You're channeling divine powers on Mount Olympus when"
-    },
-    "French Revolution": {
-        "Peasant": "You're marching toward the Bastille with a pitchfork when",
-        "King": "You're dining lavishly while Paris starves when",
-        "Noble": "You're hiding your family jewels from revolutionaries when",
-        "Beggar": "You're rummaging through aristocratic trash bins when",
-        "Soldier": "You're guarding the Tuileries Palace when",
-        "General": "You're planning troop deployments against rebels when",
-        "Resistance": "You're printing revolutionary pamphlets in secret when",
-        "Politician": "You're giving a fiery speech at the National Assembly when"
-    }
-}
-
-# Genre descriptions
-GENRE_DESCRIPTIONS = {
-    "Fantasy": "You are in a world of magic and medieval fantasy, where dragons soar through the skies and ancient ruins hold forgotten treasures.",
-    "Sci-Fi": "You are in the distant future, with advanced technology, space travel, and alien civilizations among the stars.",
-    "Cyberpunk": "You are in a dystopian future dominated by megacorporations, where cybernetic enhancements are common and the line between human and machine is blurred.",
-    "Post-Apocalyptic": "You are in a world after a catastrophic event, where civilization has collapsed and survivors scavenge among the ruins of the old world.",
-    "1880": "You are in the late 19th century during the Industrial Revolution, a time of steam power, early electricity, and social upheaval.",
-    "WW1": "You are in the trenches and battlefields of World War I, a brutal conflict that introduced modern warfare to the world.",
-    "1925 New York": "You are in the Roaring Twenties in New York City, a time of jazz, prohibition, organized crime, and economic prosperity.",
-    "Roman Empire": "You are in ancient Rome at the height of its power, with gladiators, legions, and political intrigue in the eternal city.",
-    "French Revolution": "You are in France during the revolution, a time of upheaval where the monarchy was overthrown and the reign of terror began."
-}
 
 # DM system prompt
 DM_SYSTEM_PROMPT = """
@@ -613,29 +465,10 @@ class AIWorker(QThread):
 
     def get_ai_response(self, prompt, model):
         try:
-            response = requests.post(
-                CONFIG["OLLAMA_URL"],
-                json={
-                    "model": model,
-                    "prompt": prompt,
-                    "stream": False,
-                    "options": {
-                        "temperature": self.temperature,
-                        "stop": ["\n\n"],
-                        "min_p": 0.05,
-                        "top_k": 40,
-                        "top_p": 0.9,
-                        "num_predict": 512
-                    }
-                },
-                timeout=120
-            )
-            response.raise_for_status()
-            return response.json().get("response", "").strip()
-        except requests.exceptions.Timeout:
-            raise Exception("AI request timed out after 120 seconds")
-        except requests.exceptions.ConnectionError:
-            raise Exception("Cannot connect to Ollama server. Make sure Ollama is running on localhost:11434")
+            # Use the unified GameCore AI response method
+            game_core = GameCore()
+            response = game_core.get_ai_response(prompt, model)
+            return response
         except Exception as e:
             self.log_error("Error in get_ai_response", e)
             return ""
@@ -1199,7 +1032,7 @@ class ModernSetupDialog(QDialog):
         self.voice_scanner.start()
     
     def genre_changed(self, genre):
-        self.genre_desc.setText(GENRE_DESCRIPTIONS.get(genre, ""))
+        self.genre_desc.setText(get_genre_description(genre))
         self.role_combo.clear()
         if genre in ROLE_STARTERS:
             self.role_combo.addItems(ROLE_STARTERS[genre].keys())
@@ -1280,31 +1113,28 @@ class ModernSetupDialog(QDialog):
 class AdventureGameGUI(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        # Initialize shared game core
+        self.core = GameCore()
+        self.state = self.core.state
+
         self.settings = QSettings(CONFIG["CONFIG_FILE"], QSettings.IniFormat)
         self.current_theme = self.settings.value("theme", "Mystic Twilight")
         self.setWindowTitle("✨ AI Dungeon Master - Interactive Storytelling")
         self.setGeometry(100, 100, 1200, 900)
-        
-        self.adventure_started = False
-        self.last_ai_reply = ""
-        self.conversation = ""
-        self.last_player_input = ""
-        self.ollama_model = "llama3:instruct"
-        self.character_name = ""
-        self.selected_genre = ""
-        self.selected_role = ""
+
         self.tts_enabled = True
         self.selected_voice = "FemaleBritishAccent_WhyLucyWhy_Voice_2.wav"
         self.temperature = 0.7
         self.max_tokens = 512
-        
+
         self.ai_worker = None
         self.tts_worker = None
-        
+
         self.auto_save_timer = QTimer()
         self.auto_save_timer.timeout.connect(self.auto_save)
         self.auto_save_timer.start(CONFIG["AUTO_SAVE_INTERVAL"])
-        
+
         self.init_ui()
         self.show_setup_dialog()
         
@@ -1354,7 +1184,22 @@ class AdventureGameGUI(QMainWindow):
         # Game text area with syntax highlighting
         self.text_area = QTextEdit()
         self.text_area.setReadOnly(True)
-        self.text_area.setFont(QFont("Segoe UI", 12))
+        # Use Chinese-friendly font for text area
+        fonts_to_try = [
+            "Microsoft YaHei",  # Windows Chinese font
+            "PingFang SC",      # macOS Chinese font
+            "Noto Sans CJK SC", # Linux Chinese font
+            "SimHei",           # Fallback Chinese font
+            "Arial Unicode MS", # Unicode fallback
+            "Segoe UI"          # Default fallback
+        ]
+        text_font = QFont()
+        for font_name in fonts_to_try:
+            text_font.setFamily(font_name)
+            if text_font.exactMatch():
+                break
+        text_font.setPointSize(12)
+        self.text_area.setFont(text_font)
         self.text_area.setStyleSheet(f"""
             QTextEdit {{
                 background: {THEMES[self.current_theme]['text_area']};
@@ -1667,7 +1512,7 @@ class AdventureGameGUI(QMainWindow):
         dialog.close()
         
         # Update the conversation with theme change notification
-        if self.adventure_started:
+        if self.state.adventure_started:
             self.append_text(f"🎨 <font color='{THEMES[theme_name]['primary']}'>Theme changed to: {theme_name}</font><br>")
     
     def show_setup_dialog(self):
@@ -1687,10 +1532,10 @@ class AdventureGameGUI(QMainWindow):
             self.append_text("🎛️ <font color='#FFB74D'>Settings updated.</font><br>")
     
     def apply_settings(self, selections):
-        self.ollama_model = selections["model"]
-        self.selected_genre = selections["genre"]
-        self.selected_role = selections["role"]
-        self.character_name = selections["character_name"]
+        self.state.current_model = selections["model"]
+        self.state.selected_genre = selections["genre"]
+        self.state.selected_role = selections["role"]
+        self.state.character_name = selections["character_name"]
         self.tts_enabled = selections["tts_enabled"]
         self.selected_voice = selections["voice"]
         self.temperature = selections["temperature"]
@@ -1702,10 +1547,10 @@ class AdventureGameGUI(QMainWindow):
             self.apply_theme(THEMES[self.current_theme])
         
         # Save settings
-        self.settings.setValue("model", self.ollama_model)
-        self.settings.setValue("genre", self.selected_genre)
-        self.settings.setValue("role", self.selected_role)
-        self.settings.setValue("character_name", self.character_name)
+        self.settings.setValue("model", self.state.current_model)
+        self.settings.setValue("genre", self.state.selected_genre)
+        self.settings.setValue("role", self.state.selected_role)
+        self.settings.setValue("character_name", self.state.character_name)
         self.settings.setValue("tts_enabled", self.tts_enabled)
         self.settings.setValue("theme", self.current_theme)
         
@@ -1730,21 +1575,21 @@ class AdventureGameGUI(QMainWindow):
                     return
         
         # Start new adventure
-        starter = ROLE_STARTERS[self.selected_genre][self.selected_role]
-        self.append_text(f"<font color='#FFA500'><b>🌟 Adventure Start: {self.character_name} the {self.selected_role} 🌟</b></font><br><br>")
+        starter = ROLE_STARTERS[self.state.selected_genre][self.state.selected_role]
+        self.append_text(f"<font color='#FFA500'><b>🌟 Adventure Start: {self.state.character_name} the {self.state.selected_role} 🌟</b></font><br><br>")
         self.append_text(f"<b>🎬 Starting scenario:</b> {starter}<br><br>")
         self.append_text("<font color='#4FC3F7'>💡 Type <b>/help</b> for available commands</font><br><br>")
         
         initial_context = (
             f"### Adventure Setting ###\n"
-            f"Genre: {self.selected_genre}\n"
-            f"Player Character: {self.character_name} the {self.selected_role}\n"
+            f"Genre: {self.state.selected_genre}\n"
+            f"Player Character: {self.state.character_name} the {self.state.selected_role}\n"
             f"Starting Scenario: {starter}\n\n"
             "Dungeon Master: "
         )
-        self.conversation = initial_context
+        self.state.conversation = initial_context
         
-        self.get_ai_response(DM_SYSTEM_PROMPT + "\n\n" + self.conversation)
+        self.get_ai_response(DM_SYSTEM_PROMPT + "\n\n" + self.state.conversation)
     
     def append_text(self, text):
         self.text_area.moveCursor(QTextCursor.End)
@@ -1764,13 +1609,13 @@ class AdventureGameGUI(QMainWindow):
             return
         
         # Process player action
-        self.last_player_input = user_input
+        self.state.last_player_input = user_input
         self.append_text(f"<font color='{THEMES[self.current_theme]['primary']}'><b>🎭 You:</b> {user_input}</font><br>")
         
         formatted_input = f"Player: {user_input}"
         prompt = (
             f"{DM_SYSTEM_PROMPT}\n\n"
-            f"{self.conversation}\n"
+            f"{self.state.conversation}\n"
             f"{formatted_input}\n"
             "Dungeon Master:"
         )
@@ -1798,10 +1643,10 @@ class AdventureGameGUI(QMainWindow):
         elif cmd.startswith('/model'):
             parts = cmd.split()
             if len(parts) > 1:
-                self.ollama_model = parts[1]
-                self.append_text(f"🔄 <font color='#FFA500'>Model changed to: {self.ollama_model}</font><br>")
+                self.state.current_model = parts[1]
+                self.append_text(f"🔄 <font color='#FFA500'>Model changed to: {self.state.current_model}</font><br>")
             else:
-                QMessageBox.information(self, "Current Model", f"🤖 Using model: {self.ollama_model}")
+                QMessageBox.information(self, "Current Model", f"🤖 Using model: {self.state.current_model}")
         elif cmd == '/tts':
             self.tts_enabled = not self.tts_enabled
             status = "enabled" if self.tts_enabled else "disabled"
@@ -1821,15 +1666,15 @@ class AdventureGameGUI(QMainWindow):
         """Show current game status and settings"""
         status_text = f"""
 <h3>🎮 Current Adventure Status</h3>
-<p><b>Character:</b> {self.character_name} the {self.selected_role}<br>
-<b>Genre:</b> {self.selected_genre}<br>
+<p><b>Character:</b> {self.state.character_name} the {self.state.selected_role}<br>
+<b>Genre:</b> {self.state.selected_genre}<br>
 <b>Theme:</b> {self.current_theme}<br>
-<b>AI Model:</b> {self.ollama_model}<br>
+<b>AI Model:</b> {self.state.current_model}<br>
 <b>TTS:</b> {'Enabled' if self.tts_enabled else 'Disabled'}<br>
 <b>Voice:</b> {self.selected_voice}<br>
 <b>Temperature:</b> {self.temperature}<br>
 <b>Max Tokens:</b> {self.max_tokens}</p>
-<p><b>Conversation Length:</b> {len(self.conversation.split())} words</p>
+<p><b>Conversation Length:</b> {len(self.state.conversation.split())} words</p>
 """
         QMessageBox.information(self, "Adventure Status", status_text)
     
@@ -1837,17 +1682,17 @@ class AdventureGameGUI(QMainWindow):
         """Export conversation to a text file"""
         try:
             file_path, _ = QFileDialog.getSaveFileName(
-                self, "Export Conversation", str(Path.home() / f"{self.character_name}_adventure.txt"), 
+                self, "Export Conversation", str(Path.home() / f"{self.state.character_name}_adventure.txt"), 
                 "Text Files (*.txt)"
             )
             
             if file_path:
                 with open(file_path, "w", encoding="utf-8") as f:
-                    f.write(f"Adventure Export: {self.character_name} the {self.selected_role}\n")
-                    f.write(f"Genre: {self.selected_genre}\n")
+                    f.write(f"Adventure Export: {self.state.character_name} the {self.state.selected_role}\n")
+                    f.write(f"Genre: {self.state.selected_genre}\n")
                     f.write(f"Exported: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                     f.write("=" * 50 + "\n\n")
-                    f.write(self.conversation)
+                    f.write(self.state.conversation)
                 
                 self.append_text(f"📤 <font color='#FFA500'>Conversation exported to: {file_path}</font><br>")
         except Exception as e:
@@ -1859,7 +1704,7 @@ class AdventureGameGUI(QMainWindow):
         self.progress_bar.setValue(0)
         self.set_ui_enabled(False)
         
-        self.ai_worker = AIWorker(prompt, self.ollama_model, self.temperature)
+        self.ai_worker = AIWorker(prompt, self.state.current_model, self.temperature)
         self.ai_worker.response_ready.connect(self.handle_ai_response)
         self.ai_worker.error_occurred.connect(self.handle_ai_error)
         self.ai_worker.progress_update.connect(self.progress_bar.setValue)
@@ -1871,8 +1716,8 @@ class AdventureGameGUI(QMainWindow):
         self.status_label.setText("🟢 Ready for your next action")
         
         self.append_text(f"<font color='{THEMES[self.current_theme]['accent']}'><b>🎮 Dungeon Master:</b> {response}</font><br><br>")
-        self.conversation += f"\nDungeon Master: {response}"
-        self.last_ai_reply = response
+        self.state.conversation += f"\nDungeon Master: {response}"
+        self.state.last_ai_reply = response
         self.speak_text(response)
         
         # Auto-save after each response
@@ -1904,15 +1749,35 @@ class AdventureGameGUI(QMainWindow):
     def handle_tts_error(self, error_msg):
         self.log_error(f"TTS Error: {error_msg}")
     
-    def log_error(self, error_message):
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        try:
-            with open(CONFIG["LOG_FILE"], "a", encoding="utf-8") as log_file:
-                log_file.write(f"\n--- ERROR [{timestamp}] ---\n")
-                log_file.write(f"Message: {error_message}\n")
-                log_file.write("--- END ERROR ---\n")
-        except Exception as e:
-            print(f"Failed to write to error log: {e}")
+    def log_error(self, error_message, exception=None, context=None):
+        """Use shared logging system"""
+        if hasattr(self, 'core') and self.core:
+            self.core.log_error(error_message, exception, context)
+        else:
+            # Fallback logging if core is not available
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            try:
+                with open(CONFIG["LOG_FILE"], "a", encoding="utf-8") as log_file:
+                    log_file.write(f"\n--- ERROR [{timestamp}] ---\n")
+                    log_file.write(f"Message: {error_message}\n")
+                    log_file.write("--- END ERROR ---\n")
+            except Exception as e:
+                print(f"Failed to write to error log: {e}")
+
+    def log_operation(self, operation, parameters=None, result=None, duration=None, context=None):
+        """Use shared logging system"""
+        if hasattr(self, 'core') and self.core:
+            self.core.log_operation(operation, parameters, result, duration, context)
+
+    def log_ai_request(self, prompt, request_data, response_data, duration, context=None):
+        """Use shared logging system"""
+        if hasattr(self, 'core') and self.core:
+            self.core.log_ai_request(prompt, request_data, response_data, duration, context)
+
+    def log_game_action(self, action, details=None, conversation=None, context=None):
+        """Use shared logging system"""
+        if hasattr(self, 'core') and self.core:
+            self.core.log_game_action(action, details, conversation, context)
     
     def set_ui_enabled(self, enabled):
         self.input_field.setEnabled(enabled)
@@ -1950,14 +1815,14 @@ Be creative and immersive in your descriptions!</p>
         QMessageBox.information(self, "Help Guide", help_text)
     
     def redo_last(self):
-        if self.last_ai_reply and self.last_player_input:
+        if self.state.last_ai_reply and self.state.last_player_input:
             # Remove last DM response
-            self.conversation = self.conversation[:self.conversation.rfind("Dungeon Master:")].strip()
+            self.state.conversation = self.state.conversation[:self.state.conversation.rfind("Dungeon Master:")].strip()
             
             full_prompt = (
                 f"{DM_SYSTEM_PROMPT}\n\n"
-                f"{self.conversation}\n"
-                f"Player: {self.last_player_input}\n"
+                f"{self.state.conversation}\n"
+                f"Player: {self.state.last_player_input}\n"
                 "Dungeon Master:"
             )
             self.get_ai_response(full_prompt)
@@ -1970,7 +1835,7 @@ Be creative and immersive in your descriptions!</p>
             save_path = Path(CONFIG["SAVE_DIR"]) / f"adventure_{timestamp}.txt"
             
             with open(save_path, "w", encoding="utf-8") as f:
-                f.write(self.conversation)
+                f.write(self.state.conversation)
             
             self.append_text(f"💾 <font color='#FFA500'>Adventure saved to: {save_path}</font><br>")
         except Exception as e:
@@ -2000,32 +1865,32 @@ Be creative and immersive in your descriptions!</p>
     def load_save_file(self, file_path):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
-                self.conversation = f.read()
+                self.state.conversation = f.read()
             
             # Find last DM response
-            last_dm = self.conversation.rfind("Dungeon Master:")
+            last_dm = self.state.conversation.rfind("Dungeon Master:")
             if last_dm != -1:
-                self.last_ai_reply = self.conversation[last_dm + len("Dungeon Master:"):].strip()
+                self.state.last_ai_reply = self.state.conversation[last_dm + len("Dungeon Master:"):].strip()
                 # Display the last part of the conversation
-                recent_start = max(0, self.conversation.rfind("---", 0, last_dm))
-                recent_text = self.conversation[recent_start:]
+                recent_start = max(0, self.state.conversation.rfind("---", 0, last_dm))
+                recent_text = self.state.conversation[recent_start:]
                 self.text_area.clear()
                 self.append_text(recent_text.replace('\n', '<br>'))
             
-            self.adventure_started = True
+            self.state.adventure_started = True
             return True
         except Exception as e:
             self.log_error(f"Error loading save file: {str(e)}")
             return False
     
     def auto_save(self):
-        if not self.adventure_started or not self.conversation:
+        if not self.state.adventure_started or not self.state.conversation:
             return
-            
+
         try:
             auto_save_path = Path(CONFIG["SAVE_DIR"]) / "autosave.txt"
             with open(auto_save_path, "w", encoding="utf-8") as f:
-                f.write(self.conversation)
+                f.write(self.state.conversation)
         except Exception as e:
             self.log_error(f"Auto-save error: {str(e)}")
     
@@ -2055,8 +1920,23 @@ def main():
     app.setApplicationVersion("3.0")
     app.setStyle('Fusion')
     
-    # Set modern font
-    font = QFont("Segoe UI", 10)
+    # Set font that supports Chinese characters
+    # Try different fonts in order of preference
+    fonts_to_try = [
+        "Microsoft YaHei",  # Windows Chinese font
+        "PingFang SC",      # macOS Chinese font
+        "Noto Sans CJK SC", # Linux Chinese font
+        "SimHei",           # Fallback Chinese font
+        "Arial Unicode MS", # Unicode fallback
+        "Segoe UI"          # Default fallback
+    ]
+
+    font = QFont()
+    for font_name in fonts_to_try:
+        font.setFamily(font_name)
+        if font.exactMatch():
+            break
+    font.setPointSize(10)
     app.setFont(font)
     
     # Create necessary directories

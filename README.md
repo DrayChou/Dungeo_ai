@@ -20,8 +20,8 @@ Created with ❤️ for all ages, this project lets you explore, role-play, and 
 
 ## ⚙️ Requirements
 
-* 🐍 Python `3.10+`
-* 📦 pip (Python package installer)
+* 🐍 Python `3.10`
+* 📦 [uv](https://docs.astral.sh/uv/) (fast Python package installer and project manager)
 * 🦙 [Ollama](https://ollama.com/) (for local AI model inference)
 * 🧠 [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (for GPU acceleration)
 * 🧰 git (optional but helpful)
@@ -31,38 +31,39 @@ Created with ❤️ for all ages, this project lets you explore, role-play, and 
 
 ## 📦 Installation
 
-### 1️⃣ Clone the Repository
+### 1️⃣ Install uv (if not already installed)
+
+```bash
+# macOS and Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Or with pip (slower)
+pip install uv
+```
+
+### 2️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/Laszlobeer/Dungeo_ai.git
 cd Dungeo_ai
 ```
 
-### 2A. Create a Virtual Environment (Python `venv`)
+### 3️⃣ Install Dependencies with uv
 
 ```bash
-python -m venv Dungeo_ai
-source Dungeo_ai/bin/activate  # On Windows: Dungeo_ai\Scripts\activate
+uv sync
 ```
 
-### 2B. Create a Conda Environment (Optional)
+This will automatically:
 
-```bash
-conda create -n dungeo_ai python=3.10 -y
-conda activate dungeo_ai
-```
+* Download and use Python 3.10.19
+* Create a virtual environment in `.venv/`
+* Install all required dependencies
 
-### 3️⃣ Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-> 💡 If you get errors from `requirements.txt`, try installing manually:
-
-```bash
-pip requests sounddevice numpy soundfile
-```
+> 💡 The project is configured to use Python 3.10.19 specifically. uv will download it automatically if not available on your system.
 
 ---
 
@@ -71,7 +72,92 @@ pip requests sounddevice numpy soundfile
 ### 🧪 Start the Adventure
 
 ```bash
-python main.py
+uv run python main.py
+```
+
+**OR** (after the first run, you can also use):
+
+```bash
+uv run main.py
+```
+
+### 🖥️ 图形界面版本
+
+项目提供两个图形界面版本：
+
+#### GUI 模式
+```bash
+# 现代化 GUI（推荐）
+uv run python gui.py
+
+# 经典 GUI
+uv run python dungeonaigui.py
+```
+
+**GUI 特性：**
+- 🎨 现代化界面设计
+- 🎭 多主题支持（深空、赛博霓虹等）
+- 🎛️️ 配置保存和加载
+- 🔄 自动保存功能
+- 🎚️ 实时角色创建
+- 📊 进度显示
+- 🔊 TTS 语音合成支持
+
+### 🌍 多语言支持
+
+项目支持多种语言：
+
+- **中文（简体）** - 默认语言
+- **English** - 英文版本
+
+#### 切换语言
+
+如需切换到英文版本，修改 `main.py` 文件：
+
+```python
+# 将这一行
+init_localization('zh_CN')
+
+# 改为
+init_localization('en')
+```
+
+#### 添加新语言
+
+1. 在 `locales/` 目录下创建新的语言文件（如 `fr.yml`）
+2. 参考 `zh_CN.yml` 和 `en.yml` 的格式
+3. 修改 `main.py` 中的语言代码
+
+**当前翻译内容包括：**
+- ✅ 用户界面文本
+- ✅ 游戏类型描述（9种类型）
+- ✅ 角色起始描述（200+ 个角色）
+- ✅ 地城主系统提示
+- ✅ 错误和状态消息
+- ✅ 游戏命令帮助
+- ✅ GUI 界面文本（gui.py 和 dungeonaigui.py）
+
+**GUI 多语言说明：**
+- GUI 界面同样支持中文和英文切换
+- 修改 `gui.py` 或 `dungeonaigui.py` 中的 `init_localization('zh_CN')` 为 `init_localization('en')` 即可切换语言
+- 所有界面元素都会相应切换语言
+
+### 🛠️ Development Tools
+
+This project includes development tools configured with uv:
+
+```bash
+# Format code
+uv run black .
+
+# Lint code
+uv run ruff check .
+
+# Type check
+uv run mypy .
+
+# Install development dependencies
+uv sync --dev
 ```
 
 

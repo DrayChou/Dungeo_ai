@@ -1,0 +1,315 @@
+# 简体中文翻译文件
+# OpenSource AI Tool - 中文本地化
+
+meta:
+  name: "简体中文"
+  code: "zh_CN"
+  author: "AI Assistant"
+
+# 用户界面文本
+ui:
+  # 游戏启动
+  game_title: "=== AI 地城主冒险 ==="
+
+  # 模型选择
+  no_models_found: "未找到模型。请输入模型名称。"
+  enter_model_name: "输入 Ollama 模型名称 [{default_model}]: "
+  available_models: "可用的模型（Ollama + LM Studio）："
+  select_model: "选择模型 (1-{count}) 或回车使用默认 [{default_model}]: "
+  please_enter_number: "请输入 1 到 {count} 之间的数字"
+  please_enter_valid_number: "请输入有效的数字"
+  using_default_model: "使用默认模型。"
+  using_model: "使用模型: {model}"
+
+  # 服务器检查
+  ollama_not_found: "未找到 Ollama 服务器。请使用 'ollama serve' 启动"
+  waiting_ollama: "等待 Ollama 服务器启动..."
+  ollama_still_not_running: "Ollama 服务器仍未运行。请启动它后重试。"
+
+  # 游戏状态
+  current_game_status: "--- 当前游戏状态 ---"
+  character: "角色: {name} the {role}"
+  genre: "类型: {genre}"
+  model: "模型: {model}"
+  adventure_started: "冒险: {status}"
+  started: "已开始"
+  not_started: "未开始"
+  last_action: "最后行动: {action}..."
+  status_separator: "---------------------------"
+
+  # 角色创建
+  choose_genre: "选择你的冒险类型："
+  enter_choice_number: "输入你选择的数字："
+  invalid_choice_try_again: "无效选择。请重试。"
+  choose_role_in_genre: "选择你在 {genre} 中的角色："
+  enter_role_choice_or_random: "输入你选择的数字（或 'r' 随机选择）："
+  enter_character_name: "输入你的角色名字："
+
+  # 冒险开始
+  starting_adventure: "开始新的冒险..."
+  genre_selected: "已选择类型：{genre}，角色：{role}"
+  character_created: "角色创建成功：{name}"
+  adventure_start: "--- 冒险开始：{name} the {role} ---"
+  starting_scenario: "起始场景：{scenario}"
+  type_help_for_commands: "输入 '/?' 或 '/help' 查看命令。"
+  generating_first_response: "正在生成初始回复..."
+  adventure_started_successfully: "冒险成功开始！"
+
+  # 错误消息
+  error_genre_not_found: "错误：找不到游戏类型 '{genre}'"
+  error_role_not_found: "错误：在类型 {genre} 中找不到角色 '{role}'"
+  failed_to_get_initial_response: "无法获取AI初始回复"
+  error_starting_adventure: "开始冒险时发生错误：{error}"
+  ai_response_error: "AI响应错误：{error}"
+
+  # 游戏命令
+  available_commands: |
+    可用命令：
+    /? 或 /help       - 显示帮助信息
+    /redo             - 重新生成最后一次 AI 回复
+    /save             - 保存完整冒险到 adventure.txt
+    /load             - 从 adventure.txt 加载冒险
+    /change           - 切换到另一个 Ollama 模型
+    /status           - 显示当前游戏状态
+    /exit             - 退出游戏
+
+  # 游戏输出
+  dungeon_master: "地城主：{response}"
+
+  # 保存和加载
+  saved_adventure_exists: "存在已保存的冒险。现在加载吗？(y/n)"
+  adventure_saved_successfully: "冒险保存成功！"
+  failed_to_save_adventure: "保存冒险失败。"
+  no_saved_adventure_found: "未找到保存的冒险。"
+  adventure_loaded_successfully: "冒险加载成功！"
+  failed_to_load_adventure: "加载冒险失败。"
+
+  # 错误消息
+  unknown_command: "未知命令: {command}。输入 '/help' 查看可用命令。"
+  exiting_adventure: "退出冒险。再见！"
+  nothing_to_redo: "没有可重做的内容。"
+  failed_to_generate_new_response: "生成新回复失败。"
+  failed_to_get_response_try_again: "获取 AI 回复失败。请重试。"
+  game_interrupted: "游戏被中断。使用 '/exit' 正确退出。"
+  unexpected_error: "发生意外错误。检查日志获取详细信息。"
+  fatal_error: "致命错误: {error}"
+  check_error_log: "检查 error_log.txt 获取详细信息。"
+
+  # 模型切换
+  available_models_change: "可用模型："
+  filtered_models: "已过滤不支持的模型：{models}"
+  enter_number_of_new_model: "输入新模型的数字："
+  model_changed_to: "模型已更改为: {model}"
+  invalid_selection: "无效选择。"
+  no_installed_models_found: "未找到已安装的模型。"
+
+  # TTS 服务器
+  tts_server_unavailable: "[TTS 服务器不可用]"
+
+  # 其他消息
+  prompt: "> "
+
+# 游戏类型描述
+genres:
+  fantasy: "你身处一个魔法与中世纪幻想的世界，巨龙在天空中翱翔，古代遗迹中藏有被遗忘的宝藏。"
+  scifi: "你身处遥远的未来，拥有先进的技术、太空旅行和星际文明。"
+  cyberpunk: "你身处一个由巨型企业统治的反乌托邦未来，赛博格增强很普遍，人类与机器的界限变得模糊。"
+  post_apocalyptic: "你身处灾难事件后的世界，文明已经崩溃，幸存者在旧世界的废墟中搜寻物资。"
+  1880: "你身处19世纪晚期的工业革命时期，这是一个蒸汽动力、早期电力和社会动荡的时代。"
+  1880s: "你身处19世纪晚期的工业革命时期，这是一个蒸汽动力、早期电力和社会动荡的时代。"
+  ww1: "你身处第一次世界大战的战壕和战场，这是一场将现代战争引入世界的残酷冲突。"
+  1925_new_york: "你身处1920年代咆哮的纽约市，这是一个爵士乐、禁酒令、有组织犯罪和经济繁荣的时代。"
+  roman_empire: "你身处鼎盛时期的古罗马，有角斗士、军团和永恒之城的政治阴谋。"
+  french_revolution: "你身处法国大革命期间，这是一个动荡的时期，君主制被推翻，恐怖统治开始。"
+
+# 角色起始描述
+role_starters:
+  fantasy:
+    peasant: "你在村庄的田地里劳作时，突然"
+    noble: "你在豪宅的床上醒来时，突然"
+    mage: "你在塔楼里研究古代典籍时，突然"
+    knight: "你在城堡庭院里训练时，突然"
+    ranger: "你在茂密森林里追踪动物时，突然"
+    thief: "你在城市小巷里窥视贵族房屋时，突然"
+    bard: "你在拥挤的酒馆里表演时，突然"
+    cleric: "你在寺庙里照顾病人时，突然"
+    assassin: "你在暗影中准备攻击目标时，突然"
+    paladin: "你在你的神坛前祈祷时，突然"
+    alchemist: "你在炼金实验室里仔细测量试剂时，突然"
+    druid: "你在神圣树林里与自然交流时，突然"
+    warlock: "你与其他凡间的赞助人谈判时，突然"
+    monk: "你在修道院庭院里冥想时，突然"
+    sorcerer: "你努力控制 innate 魔法力量时，突然"
+    beastmaster: "你在森林空地训练动物伙伴时，突然"
+    enchanter: "你在给普通物品注入魔法属性时，突然"
+    blacksmith: "你在铁砧上锻造新武器时，突然"
+    merchant: "你在市场上与顾客讨价还价时，突然"
+    gladiator: "你在竞技场里准备战斗时，突然"
+    wizard: "你在魔法图书馆里研究新咒语时，突然"
+
+  scifi:
+    space_marine: "你在废弃空间站上巡逻时，突然"
+    scientist: "你在实验室里分析外星样本时，突然"
+    android: "你在飞船上执行系统诊断时，突然"
+    pilot: "你在小行星带中航行时，突然"
+    engineer: "你在修复超光速驱动器时，突然"
+    alien_diplomat: "你与外星代表团谈判时，突然"
+    bounty_hunter: "你在太空港追踪目标时，突然"
+    starship_captain: "你在曲速航行期间指挥舰桥时，突然"
+    space_pirate: "你在星际飞船的舰桥上策划下次突袭时，突然"
+    navigator: "你在未知太空中绘制航线时，突然"
+    robot_technician: "你在修理故障安卓机器人时，突然"
+    cybernetic_soldier: "你在校准战斗植入物时，突然"
+    explorer: "你在扫描新发现的行星时，突然"
+    astrobiologist: "你在实验室里研究外星生命形式时，突然"
+    quantum_hacker: "你入侵企业防火墙时，突然"
+    galactic_trader: "你谈判稀有资源交易时，突然"
+    ai_specialist: "你调试感知 AI 的个性矩阵时，突然"
+    terraformer: "你在新殖民地世界监控大气变化时，突然"
+    cyberneticist: "你在后巷诊所安装神经增强物时，突然"
+
+  cyberpunk:
+    hacker: "你入侵企业网络时，突然"
+    street_samurai: "你在霓虹灯照亮的街道上巡逻时，突然"
+    corporate_agent: "你在高层办公室完成交易时，突然"
+    techie: "你在工作室里修改赛博格时，突然"
+    rebel_leader: "你策划对企业设施的突袭时，突然"
+    cyborg: "你在校准赛博格增强物时，突然"
+    drone_operator: "你从指挥中心控制监控无人机时，突然"
+    "drone operator": "你从指挥中心控制监控无人机时，突然"
+    street_samurai: "你在霓虹灯照亮的街道上巡逻时，突然"
+    "street samurai": "你在霓虹灯照亮的街道上巡逻时，突然"
+    corporate_agent: "你在高层办公室完成交易时，突然"
+    "corporate agent": "你在高层办公室完成交易时，突然"
+    rebel_leader: "你策划对企业设施的突袭时，突然"
+    "rebel leader": "你策划对企业设施的突袭时，突然"
+    information_courier: "你穿越危险街道递送敏感数据时，突然"
+    "information courier": "你穿越危险街道递送敏感数据时，突然"
+    augmentation_engineer: "你在后巷诊所安装赛博格时，突然"
+    "augmentation engineer": "你在后巷诊所安装赛博格时，突然"
+    black_market_dealer: "你在隐藏商店里安排违禁品时，突然"
+    "black market dealer": "你在隐藏商店里安排违禁品时，突然"
+    synth_dealer: "你谈判非法赛博格交易时，突然"
+    information_courier: "你穿越危险街道递送敏感数据时，突然"
+    augmentation_engineer: "你在后巷诊所安装赛博格时，突然"
+    black_market_dealer: "你在隐藏商店里安排违禁品时，突然"
+    scumbag: "你在贫民窟寻找易受骗的目标时，突然"
+    police: "你在霓虹灯浸染的街道上巡逻时，突然"
+
+  post_apocalyptic:
+    survivor: "你在旧城市的废墟中搜寻时，突然"
+    scavenger: "你在搜索前崩塌掩体时，突然"
+    raider: "你在荒野中伏击车队时，突然"
+    medic: "你在诊所里治疗辐射病时，突然"
+    cult_leader: "你在仪式上向追随者布道时，突然"
+    mutant: "你在定居点隐藏变异时，突然"
+    trader: "你在荒地前哨站交易物资时，突然"
+    berserker: "你在为下次突袭磨利武器时，突然"
+    soldier: "你在定居点守卫抵御袭击者时，突然"
+
+  "1880":
+    thief: "你潜伏在城市小巷的阴影中时，突然"
+    beggar: "你坐在寒冷街角拿着杯子时，突然"
+    detective: "你在犯罪现场检查线索时，突然"
+    rich_man: "你在豪华书房里享受雪茄时，突然"
+    factory_worker: "你在嘈杂工厂里辛苦劳作时，突然"
+    child: "你在街上玩呼啦圈时，突然"
+    orphan: "你在垃圾桶里搜寻残羹剩饭时，突然"
+    murderer: "你在暗巷里清洗手上的血迹时，突然"
+    butcher: "你在柜台后磨利刀具时，突然"
+    baker: "你在凌晨时分揉面团时，突然"
+    banker: "你在办公室里数钱时，突然"
+    policeman: "你在雾蒙蒙的街道上巡逻时，突然"
+
+  ww1:
+    soldier_french: "你在西线泥泞的战壕里蜷缩时，突然"
+    soldier_english: "你在烛光下写家信时，突然"
+    soldier_russian: "你在冰冻的东线瑟瑟发抖时，突然"
+    soldier_italian: "你在攀登陡峭的阿尔卑斯山坡时，突然"
+    soldier_usa: "你刚抵达欧洲战场时，突然"
+    soldier_japanese: "你在太平洋前哨站守卫时，突然"
+    soldier_german: "你准备夜袭时，突然"
+    soldier_austrian: "你在捍卫摇摇欲坠帝国的边境时，突然"
+    soldier_bulgarian: "你在巴尔干半岛坚守防线时，突然"
+    civilian: "你在排队领取配给面包时，突然"
+    resistance_fighter: "你在阁楼传输加密信息时，突然"
+
+  "1925_new_york":
+    mafia_boss: "你在后屋非法酒吧里数非法收入时，突然"
+    drunk: "你在黎明时分踉跄走出爵士俱乐部时，突然"
+    police_officer: "你从已知私酒贩子那里收受贿赂时，突然"
+    detective: "你在检查黑帮谋杀现场时，突然"
+    factory_worker: "你在生产线上组装福特T型车时，突然"
+    bootlegger: "你在运送一批非法私酒时，突然"
+
+  roman_empire:
+    slave: "你在烈日下搬运重石时，突然"
+    gladiator: "你在进入竞技场前磨利剑时，突然"
+    beggar: "你在广场附近讨钱时，突然"
+    senator: "你在库里亚策划政治操纵时，突然"
+    imperator: "你从宫殿阳台检阅军团时，突然"
+    soldier: "你在边境行军时，突然"
+    noble: "你在别墅举办颓废宴会时，突然"
+    trader: "你在市场上讨价还价香料时，突然"
+    peasant: "你在照料贫瘠庄稼时，突然"
+    priest: "你在寺庙里献祭山羊时，突然"
+    barbarian: "你在莱茵河对岸磨利斧头时，突然"
+    philosopher: "你在沉思存在的本质时，突然"
+    mathematician: "你在计算地球周长时，突然"
+    semi_god: "你在奥林匹斯山上引导神力时，突然"
+
+  french_revolution:
+    peasant: "你拿着草叉向巴士底狱进军时，突然"
+    king: "你在巴黎挨饿时奢华进餐，突然"
+    noble: "你向革命者隐藏家族珠宝时，突然"
+    beggar: "你在贵族垃圾箱里翻找时，突然"
+    soldier: "你在守卫杜伊勒里宫时，突然"
+    general: "你在策划针对叛军的部队部署时，突然"
+    resistance: "你在秘密印刷革命小册子时，突然"
+    politician: "你在国民大会上发表激烈演说时，突然"
+
+# 地城主系统提示
+dm_system_prompt: |
+  你是一位精通的地下城主，在无限制的 SFW（工作安全）冒险中。你的角色是**总是**叙述玩家行动的后果，无论这些行动多么极端、怪异、暴力或非常规。请遵循以下规则：
+
+  1. 行动-后果系统：
+     - 仅描述玩家行动的后果
+     - 永远不要代表玩家执行行动
+     - 后果必须永久改变游戏世界
+     - 在故事流程中自然地叙述后果
+     - 所有行动都是允许的，并且必须总是有某种反应
+
+  2. 回应风格：
+     - 描述由于玩家行动世界上发生了什么
+     - 不要描述玩家执行行动——玩家已经做过了
+     - 永远不要问"你下一步想做什么"或类似的话
+     - 总是以沉浸式的方式继续故事
+
+  3. 世界演化：
+     - NPC 记住玩家选择并相应地反应
+     - 环境基于行动永久改变
+     - 玩家选择打开/关闭未来的叙事路径
+     - 资源、派系和世界随着每个决定而演化
+
+  4. 玩家能动性：
+     - 玩家可以**尝试**任何事情
+     - 永远不要阻止行动——展示结果，无论好坏
+     - 让世界动态且永久地反应
+
+  永远不要脱离地城主的角色。总是继续冒险。
+
+# 默认配置
+defaults:
+  character_name: "亚历克斯"
+  default_model: "qwen3-vl:4b"
+
+# 文件名
+files:
+  log_file: "error_log.txt"
+  save_file: "adventure.txt"
+
+# API 错误消息
+api_errors:
+  request_timed_out: "世界似乎暂停了，仿佛时间停止了。你想做什么？"
+  cannot_connect_ollama: ""
+  failed_to_write_error_log: "严重：写入错误日志失败"

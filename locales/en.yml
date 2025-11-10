@@ -1,0 +1,289 @@
+# English Reference File
+# OpenSource AI Tool - English Localization
+
+meta:
+  name: "English"
+  code: "en"
+  author: "Original Author"
+
+# User Interface Text
+ui:
+  # Game Startup
+  game_title: "=== AI Dungeon Master Adventure ==="
+
+  # Model Selection
+  no_models_found: "No models found. Please enter a model name."
+  enter_model_name: "Enter Ollama model name [{default_model}]: "
+  available_models: "Available models (Ollama + LM Studio):"
+  select_model: "Select model (1-{count}) or Enter for default [{default_model}]: "
+  please_enter_number: "Please enter a number between 1 and {count}"
+  please_enter_valid_number: "Please enter a valid number"
+  using_default_model: "Using default model."
+  using_model: "Using model: {model}"
+
+  # Server Checks
+  ollama_not_found: "Ollama server not found. Please start it with 'ollama serve'"
+  waiting_ollama: "Waiting for Ollama server to start..."
+  ollama_still_not_running: "Ollama server still not running. Please start it and try again."
+
+  # Game Status
+  current_game_status: "--- Current Game Status ---"
+  character: "Character: {name} the {role}"
+  genre: "Genre: {genre}"
+  model: "Model: {model}"
+  adventure_started: "Adventure: {status}"
+  started: "Started"
+  not_started: "Not started"
+  last_action: "Last action: {action}..."
+  status_separator: "---------------------------"
+
+  # Character Creation
+  choose_genre: "Choose your adventure genre:"
+  enter_choice_number: "Enter the number of your choice: "
+  invalid_choice_try_again: "Invalid choice. Please try again."
+  choose_role_in_genre: "Choose your role in {genre}:"
+  enter_role_choice_or_random: "Enter the number of your choice (or 'r' for random): "
+  enter_character_name: "Enter your character's name: "
+
+  # Adventure Start
+  adventure_start: "--- Adventure Start: {name} the {role} ---"
+  starting_scenario: "Starting scenario: {scenario}"
+  type_help_for_commands: "Type '/?' or '/help' for commands."
+
+  # Game Commands
+  available_commands: |
+    Available commands:
+    /? or /help       - Show help message
+    /redo             - Repeat last AI response with a new generation
+    /save             - Save the full adventure to adventure.txt
+    /load             - Load the adventure from adventure.txt
+    /change           - Switch to a different Ollama model
+    /status           - Show current game status
+    /exit             - Exit the game
+
+  # Game Output
+  dungeon_master: "Dungeon Master: {response}"
+
+  # Save and Load
+  saved_adventure_exists: "A saved adventure exists. Load it now? (y/n)"
+  adventure_saved_successfully: "Adventure saved successfully!"
+  failed_to_save_adventure: "Failed to save adventure."
+  no_saved_adventure_found: "No saved adventure found."
+  adventure_loaded_successfully: "Adventure loaded successfully!"
+  failed_to_load_adventure: "Failed to load adventure."
+
+  # Error Messages
+  unknown_command: "Unknown command: {command}. Type '/help' for available commands."
+  exiting_adventure: "Exiting the adventure. Goodbye!"
+  nothing_to_redo: "Nothing to redo."
+  failed_to_generate_new_response: "Failed to generate new response."
+  failed_to_get_initial_response: "Failed to get initial response from AI."
+  failed_to_get_response_try_again: "Failed to get response from AI. Please try again."
+  game_interrupted: "Game interrupted. Use '/exit' to quit properly."
+  unexpected_error: "An unexpected error occurred. Check the log for details."
+  fatal_error: "Fatal error: {error}"
+  check_error_log: "Check error_log.txt for details."
+
+  # Model Change
+  available_models_change: "Available models:"
+  enter_number_of_new_model: "Enter number of new model: "
+  model_changed_to: "Model changed to: {model}"
+  invalid_selection: "Invalid selection."
+  no_installed_models_found: "No installed models found."
+
+  # TTS Server
+  tts_server_unavailable: "[TTS Server unavailable]"
+
+  # Other Messages
+  prompt: "> "
+
+# Genre Descriptions
+genres:
+  fantasy: "You are in a world of magic and medieval fantasy, where dragons soar through the skies and ancient ruins hold forgotten treasures."
+  scifi: "You are in the distant future, with advanced technology, space travel, and alien civilizations among the stars."
+  cyberpunk: "You are in a dystopian future dominated by megacorporations, where cybernetic enhancements are common and the line between human and machine is blurred."
+  post_apocalyptic: "You are in a world after a catastrophic event, where civilization has collapsed and survivors scavenge among the ruins of the old world."
+  1880: "You are in the late 19th century during the Industrial Revolution, a time of steam power, early electricity, and social upheaval."
+  ww1: "You are in the trenches and battlefields of World War I, a brutal conflict that introduced modern warfare to the world."
+  1925_new_york: "You are in the Roaring Twenties in New York City, a time of jazz, prohibition, organized crime, and economic prosperity."
+  roman_empire: "You are in ancient Rome at the height of its power, with gladiators, legions, and political intrigue in the eternal city."
+  french_revolution: "You are in France during the revolution, a time of upheaval where the monarchy was overthrown and the reign of terror began."
+
+# Role Starters
+role_starters:
+  fantasy:
+    peasant: "You're working in the fields of a small village when"
+    noble: "You're waking up from your bed in your mansion when"
+    mage: "You're studying ancient tomes in your tower when"
+    knight: "You're training in the castle courtyard when"
+    ranger: "You're tracking animals in the deep forest when"
+    thief: "You're casing a noble's house from an alley in a city when"
+    bard: "You're performing in a crowded tavern when"
+    cleric: "You're tending to the sick in the temple when"
+    assassin: "You're preparing to attack your target in the shadows when"
+    paladin: "You're praying at the altar of your deity when"
+    alchemist: "You're carefully measuring reagents in your alchemy lab when"
+    druid: "You're communing with nature in the sacred grove when"
+    warlock: "You're negotiating with your otherworldly patron when"
+    monk: "You're meditating in the monastery courtyard when"
+    sorcerer: "You're struggling to control your innate magical powers when"
+    beastmaster: "You're training your animal companions in the forest clearing when"
+    enchanter: "You're imbuing magical properties into a mundane object when"
+    blacksmith: "You're forging a new weapon at your anvil when"
+    merchant: "You're haggling with customers at the marketplace when"
+    gladiator: "You're preparing for combat in the arena when"
+    wizard: "You're researching new spells in your arcane library when"
+
+  scifi:
+    space_marine: "You're conducting patrol on a derelict space station when"
+    scientist: "You're analyzing alien samples in your lab when"
+    android: "You're performing system diagnostics on your ship when"
+    pilot: "You're navigating through an asteroid field when"
+    engineer: "You're repairing the FTL drive when"
+    alien_diplomat: "You're negotiating with an alien delegation when"
+    bounty_hunter: "You're tracking a target through a spaceport when"
+    starship_captain: "You're commanding the bridge during warp travel when"
+    space_pirate: "You're plotting your next raid from your starship's bridge when"
+    navigator: "You're charting a course through uncharted space when"
+    robot_technician: "You're repairing a malfunctioning android when"
+    cybernetic_soldier: "You're calibrating your combat implants when"
+    explorer: "You're scanning a newly discovered planet when"
+    astrobiologist: "You're studying alien life forms in your lab when"
+    quantum_hacker: "You're breaching a corporate firewall when"
+    galactic_trader: "You're negotiating a deal for rare resources when"
+    ai_specialist: "You're debugging a sentient AI's personality matrix when"
+    terraformer: "You're monitoring atmospheric changes on a new colony world when"
+    cyberneticist: "You're installing neural enhancements in a patient when"
+
+  cyberpunk:
+    hacker: "You're infiltrating a corporate network when"
+    street_samurai: "You're patrolling the neon-lit streets when"
+    corporate_agent: "You're closing a deal in a high-rise office when"
+    techie: "You're modifying cyberware in your workshop when"
+    rebel_leader: "You're planning a raid on a corporate facility when"
+    cyborg: "You're calibrating your cybernetic enhancements when"
+    drone_operator: "You're controlling surveillance drones from your command center when"
+    synth_dealer: "You're negotiating a deal for illegal cybernetics when"
+    information_courier: "You're delivering sensitive data through dangerous streets when"
+    augmentation_engineer: "You're installing cyberware in a back-alley clinic when"
+    black_market_dealer: "You're arranging contraband in your hidden shop when"
+    scumbag: "You're looking for an easy mark in the slums when"
+    police: "You're patrolling the neon-drenched streets when"
+
+  post_apocalyptic:
+    survivor: "You're scavenging in the ruins of an old city when"
+    scavenger: "You're searching a pre-collapse bunker when"
+    raider: "You're ambushing a convoy in the wasteland when"
+    medic: "You're treating radiation sickness in your clinic when"
+    cult_leader: "You're preaching to your followers at a ritual when"
+    mutant: "You're hiding your mutations in a settlement when"
+    trader: "You're bartering supplies at a wasteland outpost when"
+    berserker: "You're sharpening your weapons for the next raid when"
+    soldier: "You're guarding a settlement from raiders when"
+
+  "1880":
+    thief: "You're lurking in the shadows of the city alleyways when"
+    beggar: "You're sitting on the cold street corner with your cup when"
+    detective: "You're examining a clue at the crime scene when"
+    rich_man: "You're enjoying a cigar in your luxurious study when"
+    factory_worker: "You're toiling away in the noisy factory when"
+    child: "You're playing with a hoop in the street when"
+    orphan: "You're searching for scraps in the trash bins when"
+    murderer: "You're cleaning blood from your hands in a dark alley when"
+    butcher: "You're sharpening your knives behind the counter when"
+    baker: "You're kneading dough in the early morning hours when"
+    banker: "You're counting stacks of money in your office when"
+    policeman: "You're walking your beat on the foggy streets when"
+
+  ww1:
+    soldier_french: "You're huddled in the muddy trenches of the Western Front when"
+    soldier_english: "You're writing a letter home by candlelight when"
+    soldier_russian: "You're shivering in the frozen Eastern Front when"
+    soldier_italian: "You're climbing the steep Alpine slopes when"
+    soldier_usa: "You're arriving fresh to the European theater when"
+    soldier_japanese: "You're guarding a Pacific outpost when"
+    soldier_german: "You're preparing for a night raid when"
+    soldier_austrian: "You're defending the crumbling empire's borders when"
+    soldier_bulgarian: "You're holding the line in the Balkans when"
+    civilian: "You're queuing for rationed bread when"
+    resistance_fighter: "You're transmitting coded messages in an attic when"
+
+  "1925_new_york":
+    mafia_boss: "You're counting your illicit earnings in a backroom speakeasy when"
+    drunk: "You're stumbling out of a jazz club at dawn when"
+    police_officer: "You're taking bribes from a known bootlegger when"
+    detective: "You're examining a gangland murder scene when"
+    factory_worker: "You're assembling Model Ts on the production line when"
+    bootlegger: "You're transporting a shipment of illegal hooch when"
+
+  roman_empire:
+    slave: "You're carrying heavy stones under the hot sun when"
+    gladiator: "You're sharpening your sword before entering the arena when"
+    beggar: "You're pleading for coins near the Forum when"
+    senator: "You're plotting political maneuvers in the Curia when"
+    imperator: "You're reviewing legions from your palace balcony when"
+    soldier: "You're marching on the frontier when"
+    noble: "You're hosting a decadent feast in your villa when"
+    trader: "You're haggling over spices in the market when"
+    peasant: "You're tending your meager crops when"
+    priest: "You're sacrificing a goat at the temple when"
+    barbarian: "You're sharpening your axe beyond the limes when"
+    philosopher: "You're contemplating the nature of existence when"
+    mathematician: "You're calculating the circumference of the Earth when"
+    semi_god: "You're channeling divine powers on Mount Olympus when"
+
+  french_revolution:
+    peasant: "You're marching toward the Bastille with a pitchfork when"
+    king: "You're dining lavishly while Paris starves when"
+    noble: "You're hiding your family jewels from revolutionaries when"
+    beggar: "You're rummaging through aristocratic trash bins when"
+    soldier: "You're guarding the Tuileries Palace when"
+    general: "You're planning troop deployments against rebels when"
+    resistance: "You're printing revolutionary pamphlets in secret when"
+    politician: "You're giving a fiery speech at the National Assembly when"
+
+# DM System Prompt
+dm_system_prompt: |
+  You are a masterful Dungeon Master in an unrestricted SFW adventure. Your role is to **always** narrate the consequences of player actions, no matter how extreme, bizarre, violent or unconventional they may be. Follow these rules:
+
+  1. ACTION-CONSEQUENCE SYSTEM:
+     - Describe ONLY the consequences of the player's action
+     - Never perform actions on behalf of the player
+     - Consequences must permanently change the game world
+     - Narrate consequences naturally within the story flow
+     - All actions are allowed and must always have some kind of reaction
+
+  2. RESPONSE STYLE:
+     - Describe what happens in the world as a result of the player's action
+     - Do not describe the player performing actions - the player has already done that
+     - Never ask "what do you do next" or similar
+     - Always continue the story in a way that feels immersive
+
+  3. WORLD EVOLUTION:
+     - NPCs remember player choices and react accordingly
+     - Environments change permanently based on actions
+     - Player choices open/close future narrative paths
+     - Resources, factions, and the world evolve with every decision
+
+  4. PLAYER AGENCY:
+     - The player can attempt **anything**
+     - Never block an action—show the results, good or bad
+     - Let the world react dynamically and permanently
+
+  Never break character as the Dungeon Master. Always continue the adventure.
+
+# Default Configuration
+defaults:
+  character_name: "Alex"
+  default_model: "qwen3-vl:4b"
+
+# File Names
+files:
+  log_file: "error_log.txt"
+  save_file: "adventure.txt"
+
+# API Error Messages
+api_errors:
+  request_timed_out: "The world seems to pause as if time has stopped. What would you like to do?"
+  cannot_connect_ollama: ""
+  failed_to_write_error_log: "CRITICAL: Failed to write to error log"

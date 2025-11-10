@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-AI Dungeon Master Adventure - 主入口文件
+AI Dungeon Master Adventure - GUI主入口文件
 """
 
 import sys
@@ -10,8 +10,8 @@ import os
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-# Import and run the CLI main game
-from dungeona_ai.cli.main import main as cli_main
+# Import and run the GUI main game
+from dungeona_ai.gui.gui import main as gui_main
 
 if __name__ == "__main__":
-    cli_main()
+    gui_main()

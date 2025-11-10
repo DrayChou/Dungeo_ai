@@ -1,4 +1,0 @@
-requests
-sounddevice
-numpy
-soundfile
