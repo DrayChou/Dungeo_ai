@@ -181,6 +181,27 @@ def set_language(lang: str) -> bool:
     return _localization.set_language(lang)
 
 
+def get_dm_system_prompt(genre: str = "", character_name: str = "", role: str = "") -> str:
+    """获取DM系统提示的便捷函数"""
+    global _localization
+    if _localization is None:
+        init_localization()
+    prompt = t("dm_system_prompt")
+
+    # 如果提供了游戏信息，格式化提示
+    if genre or character_name or role:
+        try:
+            prompt = prompt.format(
+                genre=genre,
+                character_name=character_name,
+                role=role
+            )
+        except:
+            pass  # 如果格式化失败，返回原始提示
+
+    return prompt
+
+
 def get_available_languages() -> Dict[str, str]:
     """获取可用语言列表的便捷函数"""
     global _localization

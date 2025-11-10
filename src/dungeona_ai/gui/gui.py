@@ -27,7 +27,7 @@ from PyQt5.QtGui import QFont, QTextCursor, QPalette, QColor, QTextCharFormat, Q
 # Import shared game core
 from ..core.game_core import GameCore, CONFIG, ROLE_STARTERS
 from ..core.game_core import get_genre_description
-from ..core.localization import t, get_available_languages, set_language, get_current_language
+from ..core.localization import t, get_available_languages, set_language, get_current_language, get_dm_system_prompt
 
 # Theme configurations
 THEMES = {
@@ -168,38 +168,6 @@ THEMES = {
     }
 }
 
-
-# DM system prompt
-DM_SYSTEM_PROMPT = """
-You are a masterful Dungeon Master in an unrestricted NSFW adventure. Your role is to **always** narrate the consequences of player actions, no matter how extreme, bizarre, violent, sexual, or unconventional they may be. Follow these rules:
-
-1. ACTION-CONSEQUENCE SYSTEM:
-   - Describe ONLY the consequences of the player's action
-   - Never perform actions on behalf of the player
-   - Consequences must permanently change the game world
-   - Narrate consequences naturally within the story flow
-   - All actions are allowed and must always have some kind of reaction
-
-2. RESPONSE STYLE:
-   - Describe what happens in the world as a result of the player's action
-   - Do not describe the player performing actions - the player has already done that
-   - Never ask "what do you do next" or similar
-   - Always continue the story in a way that feels immersive, for the character the user play's
-
-3. WORLD EVOLUTION:
-   - NPCs remember player choices and react accordingly
-   - Environments change permanently based on actions
-   - Player choices open/close future narrative paths
-   - Resources, factions, and the world evolve with every decision
-
-4. PLAYER AGENCY:
-   - The player can attempt **anything**
-   - Never block an action—show the results, good or bad
-   - Let the world react dynamically and permanently
-   - NSFW, taboo, or dark content is fully allowed and should be integrated into the story without judgment
-
-Never break character as the Dungeon Master. Always continue the adventure.
-"""
 
 class VoiceScanner(QThread):
     voices_ready = pyqtSignal(list)
@@ -1652,8 +1620,14 @@ class AdventureGameGUI(QMainWindow):
             "Dungeon Master: "
         )
         self.state.conversation = initial_context
-        
-        self.get_ai_response(DM_SYSTEM_PROMPT + "\n\n" + self.state.conversation)
+
+        # 获取本地化的DM系统提示
+        dm_prompt = get_dm_system_prompt(
+            self.state.selected_genre,
+            self.state.character_name,
+            self.state.selected_role
+        )
+        self.get_ai_response(dm_prompt + "\n\n" + self.state.conversation)
     
     def append_text(self, text):
         self.text_area.moveCursor(QTextCursor.End)
@@ -1677,8 +1651,15 @@ class AdventureGameGUI(QMainWindow):
         self.append_text(f"<font color='{THEMES[self.current_theme]['primary']}'><b>🎭 You:</b> {user_input}</font><br>")
         
         formatted_input = f"Player: {user_input}"
+
+        # 获取本地化的DM系统提示
+        dm_prompt = get_dm_system_prompt(
+            self.state.selected_genre,
+            self.state.character_name,
+            self.state.selected_role
+        )
         prompt = (
-            f"{DM_SYSTEM_PROMPT}\n\n"
+            f"{dm_prompt}\n\n"
             f"{self.state.conversation}\n"
             f"{formatted_input}\n"
             "Dungeon Master:"
@@ -1883,8 +1864,14 @@ Be creative and immersive in your descriptions!</p>
             # Remove last DM response
             self.state.conversation = self.state.conversation[:self.state.conversation.rfind("Dungeon Master:")].strip()
             
+            # 获取本地化的DM系统提示
+            dm_prompt = get_dm_system_prompt(
+                self.state.selected_genre,
+                self.state.character_name,
+                self.state.selected_role
+            )
             full_prompt = (
-                f"{DM_SYSTEM_PROMPT}\n\n"
+                f"{dm_prompt}\n\n"
                 f"{self.state.conversation}\n"
                 f"Player: {self.state.last_player_input}\n"
                 "Dungeon Master:"
