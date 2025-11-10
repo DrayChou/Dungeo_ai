@@ -99,6 +99,28 @@ class Localization:
         """获取当前语言"""
         return self.lang
 
+    def set_language(self, lang: str) -> bool:
+        """
+        切换语言
+
+        Args:
+            lang: 语言代码，如 'zh_CN', 'en'
+
+        Returns:
+            bool: 切换是否成功
+        """
+        old_lang = self.lang
+        self.lang = lang
+        self._load_translations()
+
+        # 如果加载失败，回退到原语言
+        if not self.translations:
+            self.lang = old_lang
+            self._load_translations()
+            return False
+
+        return True
+
     def get_available_languages(self) -> Dict[str, str]:
         """获取可用的语言列表"""
         languages = {}
@@ -149,6 +171,14 @@ def get_current_language() -> str:
     if _localization is None:
         init_localization()
     return _localization.get_current_language()
+
+
+def set_language(lang: str) -> bool:
+    """切换语言的便捷函数"""
+    global _localization
+    if _localization is None:
+        init_localization()
+    return _localization.set_language(lang)
 
 
 def get_available_languages() -> Dict[str, str]:

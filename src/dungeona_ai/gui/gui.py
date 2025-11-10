@@ -27,6 +27,7 @@ from PyQt5.QtGui import QFont, QTextCursor, QPalette, QColor, QTextCharFormat, Q
 # Import shared game core
 from ..core.game_core import GameCore, CONFIG, ROLE_STARTERS
 from ..core.game_core import get_genre_description
+from ..core.localization import t, get_available_languages, set_language, get_current_language
 
 # Theme configurations
 THEMES = {
@@ -691,6 +692,34 @@ class ModernSetupDialog(QDialog):
         theme_layout.addWidget(self.theme_preview)
         theme_group.setLayout(theme_layout)
         basic_layout.addWidget(theme_group)
+
+        # Language selection
+        language_group = ModernGroupBox("🌐 Language / 语言")
+        language_layout = QVBoxLayout()
+
+        language_select_layout = QHBoxLayout()
+        language_select_layout.addWidget(QLabel("选择语言 / Select Language:"))
+        self.language_combo = QComboBox()
+
+        # Add available languages
+        available_languages = get_available_languages()
+        for lang_code, lang_name in available_languages.items():
+            self.language_combo.addItem(lang_name, lang_code)
+
+        # Set current language
+        current_lang = get_current_language()
+        for i in range(self.language_combo.count()):
+            if self.language_combo.itemData(i) == current_lang:
+                self.language_combo.setCurrentIndex(i)
+                break
+
+        self.language_combo.currentTextChanged.connect(self.language_changed)
+        language_select_layout.addWidget(self.language_combo)
+        language_select_layout.addStretch()
+
+        language_layout.addLayout(language_select_layout)
+        language_group.setLayout(language_layout)
+        basic_layout.addWidget(language_group)
         
         # Model selection
         model_group = ModernGroupBox("🤖 AI Model Configuration")
@@ -888,7 +917,32 @@ class ModernSetupDialog(QDialog):
             }}
         """)
         self.theme_preview.setText(f"{theme_name}\nTheme Preview")
-    
+
+    def language_changed(self, language_name):
+        """Handle language change"""
+        # Get the language code from combo box item data
+        lang_code = None
+        for i in range(self.language_combo.count()):
+            if self.language_combo.itemText(i) == language_name:
+                lang_code = self.language_combo.itemData(i)
+                break
+
+        if lang_code and set_language(lang_code):
+            # Save language setting
+            self.settings.setValue("language", lang_code)
+            # Show confirmation message
+            QMessageBox.information(self, "Language Changed / 语言已更改",
+                                   f"Language has been changed to {language_name}\n语言已更改为 {language_name}\n\nPlease restart the application to see full effects.\n请重启应用程序以查看完整效果。")
+        else:
+            # Revert to previous language if change failed
+            current_lang = get_current_language()
+            for i in range(self.language_combo.count()):
+                if self.language_combo.itemData(i) == current_lang:
+                    self.language_combo.blockSignals(True)
+                    self.language_combo.setCurrentIndex(i)
+                    self.language_combo.blockSignals(False)
+                    break
+
     def apply_theme(self, theme):
         """Apply the selected theme to the dialog"""
         self.setStyleSheet(f"""
@@ -1079,6 +1133,16 @@ class ModernSetupDialog(QDialog):
         self.genre_combo.setCurrentText(self.settings.value("genre", "Fantasy"))
         self.tts_enabled.setChecked(self.settings.value("tts_enabled", True, type=bool))
         self.theme_combo.setCurrentText(self.settings.value("theme", "Mystic Twilight"))
+
+        # Load language setting
+        saved_language = self.settings.value("language", "zh_CN")  # Default to Chinese
+        if saved_language:
+            set_language(saved_language)
+            # Update language combo box
+            for i in range(self.language_combo.count()):
+                if self.language_combo.itemData(i) == saved_language:
+                    self.language_combo.setCurrentIndex(i)
+                    break
         
         # Fix for voice setting type conversion
         voice_value = self.settings.value("voice", 0)
@@ -1120,7 +1184,7 @@ class AdventureGameGUI(QMainWindow):
 
         self.settings = QSettings(CONFIG["CONFIG_FILE"], QSettings.IniFormat)
         self.current_theme = self.settings.value("theme", "Mystic Twilight")
-        self.setWindowTitle("✨ AI Dungeon Master - Interactive Storytelling")
+        self.setWindowTitle(t("ui.window_title"))
         self.setGeometry(100, 100, 1200, 900)
 
         self.tts_enabled = True

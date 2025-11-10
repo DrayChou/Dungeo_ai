@@ -10,6 +10,7 @@ meta:
 ui:
   # 游戏启动
   game_title: "=== AI 地城主冒险 ==="
+  window_title: "✨ AI 地城主 - 互动故事冒险"
 
   # 模型选择
   no_models_found: "未找到模型。请输入模型名称。"
@@ -176,15 +177,10 @@ role_starters:
     rebel_leader: "你策划对企业设施的突袭时，突然"
     cyborg: "你在校准赛博格增强物时，突然"
     drone_operator: "你从指挥中心控制监控无人机时，突然"
-    "drone operator": "你从指挥中心控制监控无人机时，突然"
     street_samurai: "你在霓虹灯照亮的街道上巡逻时，突然"
-    "street samurai": "你在霓虹灯照亮的街道上巡逻时，突然"
     corporate_agent: "你在高层办公室完成交易时，突然"
-    "corporate agent": "你在高层办公室完成交易时，突然"
     rebel_leader: "你策划对企业设施的突袭时，突然"
-    "rebel leader": "你策划对企业设施的突袭时，突然"
     information_courier: "你穿越危险街道递送敏感数据时，突然"
-    "information courier": "你穿越危险街道递送敏感数据时，突然"
     augmentation_engineer: "你在后巷诊所安装赛博格时，突然"
     "augmentation engineer": "你在后巷诊所安装赛博格时，突然"
     black_market_dealer: "你在隐藏商店里安排违禁品时，突然"

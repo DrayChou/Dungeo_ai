@@ -10,6 +10,7 @@ meta:
 ui:
   # Game Startup
   game_title: "=== AI Dungeon Master Adventure ==="
+  window_title: "✨ AI Dungeon Master - Interactive Storytelling"
 
   # Model Selection
   no_models_found: "No models found. Please enter a model name."
